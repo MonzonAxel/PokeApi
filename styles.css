@@ -4,6 +4,25 @@
     --black: #1c1c1c;
     --gray: #ececec;
     --white: #f7f7f7;
+
+    --normal: #A8A878;
+    --fire: #F08030;
+    --water: #6890F0;
+    --grass: #78C850;
+    --electric: #F8D030;
+    --ice: #98D8D8;
+    --fighting: #C03028;
+    --poison: #A040A0;
+    --ground: #E0C068;
+    --flying: #A890F0;
+    --psychic: #F85888;
+    --bug: #A8B820;
+    --rock: #B8A038;
+    --ghost: #705898;
+    --dark: #705848;
+    --dragon: #7038F8;
+    --steel: #B8B8D0;
+    --fairy: #F0B6BC;
 }
 
 *{
@@ -24,6 +43,10 @@ body {
     background-color: var(--gray);
 }
 
+h1{
+    padding: 1rem;
+}
+
 .header-container {
     margin: 0 auto;
     padding-block: 1rem;
@@ -38,12 +61,28 @@ body {
     display: flex;
     width: 100%;
     gap: 1rem;
+    
 }
 
 .input{
     min-width: 220px;
     width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
 }
+
+.button{
+    font-weight: 500;
+    font-size: 1rem;
+    background-color: var(--white);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+/* CONTENIDO PRINCIPAL */
 
 main{
     max-width: 1000px;
@@ -52,6 +91,162 @@ main{
 }
 
 .cards-container{
-   display: grid;
-   grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    min-width: 283px
+}
+
+@media(width >540px){
+    .cards-container{
+        grid-template-columns: 1fr 1fr ;
+    }
+}
+
+@media (width > 796px){
+    .cards-container{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.card-pokemon{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    isolation: isolate;
+    gap: 0.5rem;
+    background-color: var(--white);
+    border-radius: 1rem;
+    overflow: hidden;
+    text-transform: uppercase;
+    box-shadow: 0 0 3rem -1rem rgba(0, 0, 0, .25);
+}
+
+.card-background{
+    position: absolute;
+    top: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 6rem;
+    font-weight: 800;
+    z-index: -1;
+    color: rgb(135, 135, 135);
+}
+
+
+img {
+    width: 100%;
+    max-width: 12rem;
+}
+
+
+.card-dni{
+    display: flex;
+    align-items: center;
+}
+
+
+.name{
+    font-size: 1rem;
+}
+
+.card-types{
+    display: flex;
+    font-size: .85rem;
+
+}
+
+.card-info{
+    display: flex;
+    font-size: .85rem;
+}
+
+.id, .types,
+.heigth, .weigth{
+    font-weight: 500;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    background-color: var(--gray);
+    margin-left: 1rem;
+}
+
+/* OWN COLORS */
+
+.normal {
+    background-color: var(--normal);
+}
+
+.fire {
+    background-color: var(--fire);
+}
+
+.water {
+    background-color: var(--water);
+    color: var(--white);
+}
+
+.grass {
+    background-color: var(--grass);
+}
+
+.electric {
+    background-color: var(--electric);
+}
+
+.ice {
+    background-color: var(--ice);
+}
+
+.fighting {
+    background-color: var(--fighting);
+    color: var(--white);
+}
+
+.poison {
+    background-color: var(--poison);
+    color: var(--white);
+}
+
+.ground {
+    background-color: var(--ground);
+}
+
+.flying {
+    background-color: var(--flying);
+}
+
+.psychic {
+    background-color: var(--psychic);
+}
+
+.bug {
+    background-color: var(--bug);
+}
+
+.rock {
+    background-color: var(--rock);
+}
+
+.ghost {
+    background-color: var(--ghost);
+    color: var(--white);
+}
+
+.dark {
+    background-color: var(--dark);
+    color: var(--white);
+}
+
+.dragon {
+    background-color: var(--dragon);
+    color: var(--white);
+}
+
+.steel {
+    background-color: var(--steel); 
+}
+
+.fairy {
+    background-color: var(--fairy);
 }
