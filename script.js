@@ -2,36 +2,49 @@ const URL = "https://pokeapi.co/api/v2/pokemon/";
 const cardsContainer = document.querySelector(".cards-container")
 
 
-const addPokemon = (res) => {
+const addPokemon = async () => {
 
-    const element = `<article class="card-pokemon">
-                <p class="card-background">#001</p>
+    try {
+        const resArray = await handlePokemon();
+        console.log(resArray)
+
+        resArray.forEach(res => {
+            const element = `<article class="card-pokemon">
+                <p class="card-background">#${res.id}</p>
                 <section class="card-img">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png" alt="PIDGEOTTO">
+                    <img src="${res.sprites.other["official-artwork"].front_default}" alt="${res.name.toUpperCase()}">
                 </section>
 
                 <section class="card-dni">
-                    <p class="id">#001</p>
-                    <h3 class="name">PIDGEOTTO</h3>
+                    <p class="id">#${res.id}</p>
+                    <h3 class="name">${res.name}</h3>
                 </section>
 
                 <section class="card-types">
-                    <p class="types normal">Normal</p>
-                    <p class="types flying">Flying</p>
+                    ${res.types.map(type => `<p class="types ${type.type.name}">${type.type.name}</p>`).join('')}
                 </section>
 
                 <section class="card-info">
-                    <p class="heigth">11M</p>
-                    <p  class="weigth">300Kg</p>
+                    <p class="heigth">${res.height}M</p>
+                    <p class="weigth">${res.weight}KG</p>
                 </section>
-            </article>`
-
-    cardsContainer.insertAdjacentHTML("beforeend", element)
+            </article>`;
+            console.log(res)
+            cardsContainer.insertAdjacentHTML("beforeend", element);
+        });
+    } catch (error) {
+        console.error(error);
+    }
 }
 
-for (let i = 1; i <= 151; i++) {
-    fetch(URL + i)
-        .then((res) => res.json())
-        .then(res => addPokemon(res))
+const handlePokemon = async () => {
+
+    const promises = [];
+    for (let i = 1; i <= 3; i++) {
+        const url = `${URL}${i}`;
+        promises.push(fetch(url).then(res => res.json()));
+    }
+    return Promise.all(promises);
 }
 
+addPokemon();

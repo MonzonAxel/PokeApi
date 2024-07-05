@@ -125,10 +125,9 @@ main{
 
 .card-background{
     position: absolute;
-    top: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 6rem;
+    top: 1rem;
+    left: 1rem;
+    font-size: 2rem;
     font-weight: 800;
     z-index: -1;
     color: rgb(135, 135, 135);
