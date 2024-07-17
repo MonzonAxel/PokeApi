@@ -1,6 +1,9 @@
 const URL = "https://pokeapi.co/api/v2/pokemon/";
 const cardsContainer = document.querySelector(".cards-container")
 const searchInput = document.getElementById("searchInput");
+const modal = document.getElementById("pokemonModal");
+const modalDetails = document.getElementById("modalDetails");
+const typeFilter = document.querySelector("#typeFilter");
 
 const itemsPerPage = 50;
 let currentPage = 1;
@@ -14,15 +17,18 @@ const fetchAllPokemon = () => {
     return Promise.all(promises);
 }
 
+const loadImage = (url) => {
+    return new Promise((resolve,reject) => {
+        const img = new Image()
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+    })
+}
+
 const preloadImages = (imageUrls) => {
-    return Promise.all(imageUrls.map(url => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = url;
-            img.onload = resolve;
-            img.onerror = reject;
-        });
-    }));
+    const result = imageUrls.map(url => loadImage(url));
+    return Promise.all(result);
 }
 
 const displayPokemon = async (pokemonList, page = 1) => {
@@ -58,11 +64,63 @@ const displayPokemon = async (pokemonList, page = 1) => {
             </section>
         </article>`;
         cardsContainer.insertAdjacentHTML("beforeend", element);
+
     });
+
+    const cardPokemon = document.querySelectorAll(".card-pokemon")
+    displayCardPokemon(cardPokemon)
 
     displayPagination(pokemonList);
     window.scrollTo(0, 0); // Scroll to the top of the page
 }
+
+const displayCardPokemon = (cardPokemon) =>{
+    cardPokemon.forEach(card => {
+        card.addEventListener("click", async (e) => {
+            const id = e.currentTarget.children[0].textContent.slice(1)
+            const pokemon = await fetchPokemonById(id);
+            openModal(pokemon);
+        });
+    });
+}
+
+const fetchPokemonById = async (id) => {
+    const url = `${URL}${id}`;
+    try{
+        const res = await fetch(url);
+        return res.json();
+    }
+    catch{
+        console.error("Error")
+    }
+
+}
+
+const openModal = (pokemon) => {
+
+    modalDetails.innerHTML = `
+        <h2>${pokemon.name.toUpperCase()}</h2>
+        <img src="${pokemon.sprites.other["official-artwork"].front_default}" alt="${pokemon.name}">
+        <p><strong>ID:</strong> #${pokemon.id}</p>
+        <p><strong>Height:</strong> ${pokemon.height}M</p>
+        <p><strong>Weight:</strong> ${pokemon.weight}KG</p>
+        <p><strong>Abilities:</strong> ${pokemon.abilities.map(ability => ability.ability.name.toUpperCase()).join(', ')}</p>
+    `;
+    modal.style.display = "block";
+}
+
+const closeModal = () => {
+    modal.style.display = "none";
+}
+
+document.querySelector(".close").addEventListener("click", closeModal);
+
+window.addEventListener("click", (event) => {
+    const modal = document.getElementById("pokemonModal");
+    if (event.target === modal) {
+        closeModal();
+    }
+});
 
 const displayPagination = (pokemonList) => {
     const totalPages = Math.ceil(pokemonList.length / itemsPerPage);
@@ -70,14 +128,19 @@ const displayPagination = (pokemonList) => {
 
     paginationContainer.innerHTML = "";
 
-    for (let i = 1; i <= totalPages; i++) {
-        const button = document.createElement("button");
-        button.textContent = i;
-        button.addEventListener("click", () => {
-            currentPage = i;
-            displayPokemon(pokemonList, currentPage);
-        });
-        paginationContainer.appendChild(button);
+    if(totalPages == 1) paginationContainer.style.backgroundColor = "transparent";
+
+    if(totalPages > 1){
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement("button");
+            button.classList.add("button")
+            button.textContent = i;
+            button.addEventListener("click", () => {
+                currentPage = i;
+                displayPokemon(pokemonList, currentPage);
+            });
+            paginationContainer.appendChild(button);
+        }
     }
 }
 
@@ -94,18 +157,16 @@ const filterPokemon = (query, type) => {
     displayPokemon(filtered, currentPage);
 }
 
-searchInput.addEventListener("input", () => {
-    const query = searchInput.value.trim();
-    const type = document.querySelector("#typeFilter").value;
-    filterPokemon(query, type);
-});
 
-const typeFilter = document.querySelector("#typeFilter");
-typeFilter.addEventListener("change", () => {
+const selectQueryType = () => {
     const query = searchInput.value.trim();
     const type = typeFilter.value;
     filterPokemon(query, type);
-});
+}
+
+searchInput.addEventListener("input", selectQueryType)
+
+typeFilter.addEventListener("change", selectQueryType)
 
 const init = async () => {
     try {
