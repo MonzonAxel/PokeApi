@@ -26,7 +26,7 @@ const fetchAllPokemon = () => {
                 })
         );
     }
-    return Promise.all(promises)
+    return Promise.all(promises).then(res => res.filter(pokemon => pokemon !== null)); // Filtramos los nulls
     }
 
 const loadImage = (url) => {
