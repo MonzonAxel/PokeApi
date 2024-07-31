@@ -12,10 +12,22 @@ const fetchAllPokemon = () => {
     const promises = [];
     for (let i = 1; i <= 386; i++) {
         const url = `${URL}${i}`;
-        promises.push(fetch(url).then(res => res.json()));
+        promises.push(
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .catch(error => {
+                    console.error(`Error fetching Pokémon ${i}:`, error);
+                    return null; // Retornamos null en caso de error para que Promise.all continúe
+                })
+        );
     }
-    return Promise.all(promises);
-}
+    return Promise.all(promises)
+    }
 
 const loadImage = (url) => {
     return new Promise((resolve,reject) => {
@@ -71,7 +83,7 @@ const displayPokemon = async (pokemonList, page = 1) => {
     displayCardPokemon(cardPokemon)
 
     displayPagination(pokemonList);
-    window.scrollTo(0, 0); // Scroll to the top of the page
+    window.scrollTo(0, 0);
 }
 
 const displayCardPokemon = (cardPokemon) =>{
@@ -97,7 +109,7 @@ const fetchPokemonById = async (id) => {
 }
 
 const openModal = (pokemon) => {
-
+    if (!pokemon) return;
     modalDetails.innerHTML = `
         <h2>${pokemon.name.toUpperCase()}</h2>
         <img src="${pokemon.sprites.other["official-artwork"].front_default}" alt="${pokemon.name}">
