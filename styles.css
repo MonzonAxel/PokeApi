@@ -285,7 +285,6 @@ img {
 #pagination{
     margin-block: 1rem;
     display: flex;
-    background-color: white;
     justify-content: center;
     align-items: center;
     padding-block: 1rem;
@@ -298,6 +297,7 @@ img {
     border-radius: 1rem;
     padding: 1rem;
     cursor: pointer;
+    margin:0.25rem;
 }
 
 .button:hover{
