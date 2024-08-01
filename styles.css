@@ -118,6 +118,7 @@ main{
     overflow: hidden;
     text-transform: uppercase;
     box-shadow: 0 0 3rem -1rem rgba(0, 0, 0, .25);
+    cursor: pointer;
 }
 
 .card-background{
@@ -288,6 +289,11 @@ img {
     justify-content: center;
     align-items: center;
     padding-block: 1rem;
+}
+
+#typeFilter {
+    cursor: pointer;
+    border-radius: 1rem;
 }
 
 .button{
