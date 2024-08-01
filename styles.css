@@ -44,11 +44,12 @@ button{
 }
 
 body {
-    background-color: var(--gray);
+    background-color: rgb(214,11,40);
 }
 
 h1{
     padding: 1rem;
+    color: white;
 }
 
 .header-container {
